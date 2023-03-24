@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 
 @RestController
-@RequestMapping ("/api")
+@RequestMapping("api")
 public class StatusController {
 
     @GetMapping("status")
-    public ResponseEntity<HashMap<String, Object>> getApiStatus () {
+    public ResponseEntity<HashMap<String, Object>> getApiStatus() {
         var response = new HashMap<String, Object>();
 
-        response.put("Service", "Product-API");
-        response.put("Status", "up");
+        response.put("service", "product-API");
+        response.put("status", "up");
         response.put("httpStatus", HttpStatus.OK.value());
 
         return ResponseEntity.ok(response);
