@@ -58,6 +58,16 @@ public class CategoryService {
         return CategoryResponse.of(category);
     }
 
+    public CategoryResponse update(CategoryRequest request,
+                                 Integer id) {
+        validateCategoryName(request);
+        validateId(id);
+        var category = Category.of(request);
+        category.setId(id);
+        repository.save(category);
+        return CategoryResponse.of(category);
+    }
+
     private void validateCategoryName(CategoryRequest request) {
         if (isEmpty(request.getDescription())) {
             throw new ValidationException("The category description was not informed.");

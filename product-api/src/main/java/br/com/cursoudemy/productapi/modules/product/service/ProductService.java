@@ -90,6 +90,20 @@ public class ProductService {
         return ProductResponse.of(product);
     }
 
+    public ProductResponse update(ProductRequest request,
+                                  Integer id) {
+        validateProductData(request);
+        validateId(id);
+        validateCategoryAndSupplierId(request);
+
+        var category = categoryService.findById(request.getCategoryId());
+        var supplier = supplierService.findById(request.getSupplierId());
+        var product = Product.of(request, supplier, category);
+        product.setId(id);
+        repository.save(product);
+        return ProductResponse.of(product);
+    }
+
     public void validateProductData(ProductRequest request) {
         if (isEmpty(request.getName())) {
             throw new ValidationException("The product name was not informed.");
