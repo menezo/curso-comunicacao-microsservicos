@@ -1,6 +1,8 @@
 package br.com.cursoudemy.productapi.modules.supplier.service;
 
+import br.com.cursoudemy.productapi.config.SuccessResponse;
 import br.com.cursoudemy.productapi.config.exception.ValidationException;
+import br.com.cursoudemy.productapi.modules.product.service.ProductService;
 import br.com.cursoudemy.productapi.modules.supplier.dto.SupplierRequest;
 import br.com.cursoudemy.productapi.modules.supplier.dto.SupplierResponse;
 import br.com.cursoudemy.productapi.modules.supplier.model.Supplier;
@@ -18,6 +20,8 @@ public class SupplierService {
 
     @Autowired
     private SupplierRepository repository;
+    @Autowired
+    private ProductService productService;
 
     public List<SupplierResponse> findAll() {
         return repository
@@ -43,9 +47,7 @@ public class SupplierService {
     }
 
     public Supplier findById(Integer id) {
-        if (isEmpty(id)) {
-            throw new ValidationException("Supplier ID must be informed");
-        }
+        validateId(id);
         return repository
                 .findById(id)
                 .orElseThrow(() -> new ValidationException("There is no Supplier for the given ID"));
@@ -60,6 +62,21 @@ public class SupplierService {
     private void validateSupplierName(SupplierRequest request) {
         if (isEmpty(request.getName())) {
             throw new ValidationException("The supplier name was not informed");
+        }
+    }
+
+    public SuccessResponse delete(Integer id) {
+        validateId(id);
+        if (productService.existsBySupplierId(id)) {
+            throw new ValidationException("You cannot delete this supplier because it is already defined by a product.");
+        }
+        repository.deleteById(id);
+        return SuccessResponse.create("The supplier was deleted.");
+    }
+
+    public void validateId(Integer id) {
+        if (isEmpty(id)) {
+            throw new ValidationException("Supplier ID must be informed");
         }
     }
 }

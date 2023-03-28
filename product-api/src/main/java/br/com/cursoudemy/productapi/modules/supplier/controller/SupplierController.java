@@ -1,5 +1,6 @@
 package br.com.cursoudemy.productapi.modules.supplier.controller;
 
+import br.com.cursoudemy.productapi.config.SuccessResponse;
 import br.com.cursoudemy.productapi.modules.category.dto.CategoryResponse;
 import br.com.cursoudemy.productapi.modules.supplier.dto.SupplierRequest;
 import br.com.cursoudemy.productapi.modules.supplier.dto.SupplierResponse;
@@ -34,5 +35,10 @@ public class SupplierController {
     @GetMapping("name/{name}")
     public List<SupplierResponse> findByDescription(@PathVariable String name) {
         return service.findByName(name);
+    }
+
+    @DeleteMapping("{id}")
+    public SuccessResponse deleteById(@PathVariable Integer id) {
+        return service.delete(id);
     }
 }

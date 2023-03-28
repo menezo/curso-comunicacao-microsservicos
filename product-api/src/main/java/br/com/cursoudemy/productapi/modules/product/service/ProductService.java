@@ -1,5 +1,6 @@
 package br.com.cursoudemy.productapi.modules.product.service;
 
+import br.com.cursoudemy.productapi.config.SuccessResponse;
 import br.com.cursoudemy.productapi.config.exception.ValidationException;
 import br.com.cursoudemy.productapi.modules.category.service.CategoryService;
 import br.com.cursoudemy.productapi.modules.product.dto.ProductRequest;
@@ -73,9 +74,7 @@ public class ProductService {
     }
 
     public Product findById(Integer id) {
-        if (isEmpty(id)) {
-            throw new ValidationException("Product ID must be informed.");
-        }
+        validateId(id);
         return repository
                 .findById(id)
                 .orElseThrow(() -> new ValidationException("There's no product for the given ID."));
@@ -109,6 +108,26 @@ public class ProductService {
         }
         if (isEmpty(request.getSupplierId())) {
             throw new ValidationException("The supplier id was not informed.");
+        }
+    }
+
+    public Boolean existsByCategoryId(Integer categoryId) {
+        return repository.existsByCategoryId(categoryId);
+    }
+
+    public Boolean existsBySupplierId(Integer supplierId) {
+        return repository.existsBySupplierId(supplierId);
+    }
+
+    public SuccessResponse delete(Integer id) {
+        validateId(id);
+        repository.deleteById(id);
+        return SuccessResponse.create("The product was deleted.");
+    }
+
+    public void validateId(Integer id) {
+        if (isEmpty(id)) {
+            throw new ValidationException("Product ID must be informed");
         }
     }
 }

@@ -1,5 +1,6 @@
 package br.com.cursoudemy.productapi.modules.category.controller;
 
+import br.com.cursoudemy.productapi.config.SuccessResponse;
 import br.com.cursoudemy.productapi.modules.category.dto.CategoryRequest;
 import br.com.cursoudemy.productapi.modules.category.dto.CategoryResponse;
 import br.com.cursoudemy.productapi.modules.category.service.CategoryService;
@@ -33,6 +34,11 @@ public class CategoryController {
     @GetMapping("name/{name}")
     public List<CategoryResponse> findByDescription(@PathVariable String description) {
         return service.findByDescription(description);
+    }
+
+    @DeleteMapping("{id}")
+    public SuccessResponse deleteById(@PathVariable Integer id) {
+        return service.delete(id);
     }
 
 }
