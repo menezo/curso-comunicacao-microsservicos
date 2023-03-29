@@ -98,6 +98,7 @@ public class ProductService {
 
         var category = categoryService.findById(request.getCategoryId());
         var supplier = supplierService.findById(request.getSupplierId());
+        findById(id);
         var product = Product.of(request, supplier, category);
         product.setId(id);
         repository.save(product);

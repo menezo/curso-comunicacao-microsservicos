@@ -62,6 +62,7 @@ public class CategoryService {
                                  Integer id) {
         validateCategoryName(request);
         validateId(id);
+        findById(id);
         var category = Category.of(request);
         category.setId(id);
         repository.save(category);

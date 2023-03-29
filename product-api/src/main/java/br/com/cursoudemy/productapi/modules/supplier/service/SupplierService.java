@@ -63,6 +63,7 @@ public class SupplierService {
                                    Integer id) {
         validateSupplierName(request);
         validateId(id);
+        findById(id);
         var supplier = Supplier.of(request);
         supplier.setId(id);
         repository.save(supplier);
