@@ -1,10 +1,17 @@
 import express from 'express';
 
+import { connect } from "./src/config/db/mongoDbConfig.js";
+import { createInitialData } from "./src/config/db/initialData.js";
+
 const app = express();
 const env = process.env;
 const PORT = env.PORT || 8082;
 
-app.get('/api/status', (req, res) => {
+connect();
+createInitialData();
+
+app.get('/api/status',  async (req, res) => {
+    
     return res.status(200).json({
         sevice: "Sales-API",
         status: "up",
