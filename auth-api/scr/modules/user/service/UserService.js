@@ -1,11 +1,10 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import UserRepository from "../repository/userRepository.js";
+import UserRepository from "../repository/UserRepository.js";
 import UserException from "../exception/UserException.js";
-import userRepository from "../repository/userRepository.js";
 import * as httpStatus from "../../../config/constants/httpStatus.js";
-import * as secrets from "../../../config/constants/secrets.js";
+import * as secrets from "../../../config/constants/Secrets.js";
 
 class UserService {
 

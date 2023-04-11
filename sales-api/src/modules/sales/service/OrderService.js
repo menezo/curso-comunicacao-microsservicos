@@ -20,7 +20,12 @@ class OrderService {
             const { authUser } = req;
             const { authorization } = req.headers;
             
-            let order = this.createInitialOrderData(orderData, authUser, transactionid, serviceid);
+            let order = this.createInitialOrderData(
+                orderData, 
+                authUser, 
+                transactionid, 
+                serviceid
+            );
             await this.validateProductStock(order, authorization, transactionid);
             let createdOrder = await OrderRepository.save(order);
             this.sendMessage(createdOrder, transactionid);
@@ -131,7 +136,7 @@ class OrderService {
         }
     }
 
-    async findAll() {
+    async findAll(req) {
         try {
             const { transactionid, serviceid } = req.headers;
             console.info(
