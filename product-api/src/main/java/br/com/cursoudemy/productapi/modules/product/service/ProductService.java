@@ -13,11 +13,11 @@ import br.com.cursoudemy.productapi.modules.sales.enums.SalesStatus;
 import br.com.cursoudemy.productapi.modules.sales.rabbitmq.SalesConfirmationSender;
 import br.com.cursoudemy.productapi.modules.supplier.service.SupplierService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,22 +27,20 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class ProductService {
 
     private static final Integer ZERO = 0;
+    private static final String AUTHORIZATION = "Authorization";
     private static final String TRANSACTION_ID = "transactionid";
     private static final String SERVICE_ID = "serviceid";
 
-    @Autowired
-    private ProductRepository repository;
-    @Autowired
-    private SupplierService supplierService;
-    @Autowired
-    private CategoryService categoryService;
-    @Autowired
-    private SalesConfirmationSender salesConfirmationSender;
-    @Autowired
-    private SalesClient salesClient;
+    private final ProductRepository repository;
+    private final SupplierService supplierService;
+    private final CategoryService categoryService;
+    private final SalesConfirmationSender salesConfirmationSender;
+    private final SalesClient salesClient;
+    private final ObjectMapper objectMapper;
 
     public List<ProductResponse> findAll() {
         return repository
@@ -232,15 +230,16 @@ public class ProductService {
     private SalesProductResponse getSalesByProductId(Integer productId) {
         try {
             var currentRequest = getCurrentRequest();
+            var token = currentRequest.getHeader(AUTHORIZATION);
             var transactionid = currentRequest.getHeader(TRANSACTION_ID);
             var serviceid = currentRequest.getAttribute(SERVICE_ID);
             log.info("Sending GET request to orders by productId with data {} | [transactionID: {} | serviceID: {}]",
                     productId, transactionid, serviceid);
             var response = salesClient
-                    .findSalesByProductId(productId)
+                    .findSalesByProductId(productId, token, transactionid)
                     .orElseThrow(() -> new ValidationException("The sales were not found by this product."));
             log.info("Receiving response from orders by productId with data {} | [transactionID: {} | serviceID: {}]",
-                    new ObjectMapper().writeValueAsString(response), transactionid, serviceid);
+                    objectMapper.writeValueAsString(response), transactionid, serviceid);
             return response;
         }
         catch (Exception ex) {
@@ -254,7 +253,7 @@ public class ProductService {
             var transactionid = currentRequest.getHeader(TRANSACTION_ID);
             var serviceid = currentRequest.getAttribute(SERVICE_ID);
             log.info("Request to POST product stock with data {} | [transactionID: {} | serviceID: {}]",
-                    new ObjectMapper().writeValueAsString(request), transactionid, serviceid);
+                    objectMapper.writeValueAsString(request), transactionid, serviceid);
             if (isEmpty(request) || isEmpty(request.getProducts())) {
                 throw new ValidationException("The request data and products must be informed.");
             }
@@ -263,7 +262,7 @@ public class ProductService {
                     .forEach(this::validateStock);
             var response =  SuccessResponse.create("The stock is OK!");
             log.info("Response to POST product stock with data {} | [transactionID: {} | serviceID: {}]",
-                    new ObjectMapper().writeValueAsString(response), transactionid, serviceid);
+                    objectMapper.writeValueAsString(response), transactionid, serviceid);
             return response;
         }
         catch (Exception ex) {

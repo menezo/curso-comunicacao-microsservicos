@@ -38,10 +38,6 @@ app.get("/api/initial-data", async (req, res) => {
     return res.json({ message: "Data created." });
 });
 
-app.use(tracing);
-app.use(CheckToken);
-app.use(orderRoutes);
-
 app.get('/api/status',  async (req, res) => {
     return res.status(200).json({
         sevice: "Sales-API",
@@ -49,6 +45,10 @@ app.get('/api/status',  async (req, res) => {
         httpStatus: 200
     })
 })
+
+app.use(tracing);
+app.use(CheckToken);
+app.use(orderRoutes);
 
 app.listen(PORT, () => {
     console.info(`Server started sucessfully at port ${PORT}`);
