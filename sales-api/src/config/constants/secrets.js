@@ -11,7 +11,7 @@ export const API_SECRET = env.API_SECRET
 
 export const RABBIT_MQ_URL = env.RABBIT_MQ_URL 
     ? env.RABBIT_MQ_URL 
-    : "amqp://localhost:5672";
+    : "amqps://krwrcvac:PP7JlV5YL6_Z2XC9HXRzy-fbWk6XHdnj@chimpanzee.rmq.cloudamqp.com/krwrcvac";
 
 export const PRODUCT_API_URL = env.PRODUCT_API_URL 
     ? env.PRODUCT_API_URL
