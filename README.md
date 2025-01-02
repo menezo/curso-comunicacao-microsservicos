@@ -1,6 +1,6 @@
 # Projeto: Curso Udemy - Comunicação entre Microsserviços
 
-Repositório contendo o projeto desenvolvido do curso Comunicação entre Microsserviços, ministrado por mim para a plataforma Udemy.
+Repositório contendo o projeto desenvolvido do curso Comunicação entre Microsserviços, da plataforma Udemy.
 
 Para acessar o curso na plataforma, basta acessar esta URL: https://www.udemy.com/course/comunicacao-entre-microsservicos/
 
@@ -116,8 +116,4 @@ Sending message: {"salesId":"6165b92addaf7fc9dd85dad0","status":"APPROVED","tran
 
 Recieving message from queue: {"salesId":"6165b92addaf7fc9dd85dad0","status":"APPROVED","transactionid":"8817508e-805c-48fb-9cb4-6a1e5a6e71e9"}
 ```
-
-## Documentação dos endpoints
-
-A documentação da API se faz presente no arquivo [API_DOCS.md](https://github.com/vhnegrisoli/curso-udemy-comunicacao-microsservicos/blob/master/API_DOCS.md).
 
